@@ -29,9 +29,9 @@ color_fallecidos <- 'purple'
 
 color_nuevos_positivos <- 'pink'
 
-color_hospitalizados <- 'pink'
-color_salon <- 'pink'
-color_uci <- 'pink'
+color_hospitalizados <- '#ffcc00'
+color_salon <- '#ff6666'
+color_uci <- '#ff6600'
 
 #--------------------- Íconos ---------------------
 
