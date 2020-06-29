@@ -22,7 +22,7 @@ library(leaflet)
 
 #-------------------- Colores ---------------------
 
-color_positivos <- 'blue'
+color_positivos <- '#0066cc'
 color_activos <- 'red'
 color_recuperados <- 'green'
 color_fallecidos <- 'purple'
@@ -35,16 +35,16 @@ color_uci <- '#ff6600'
 
 #--------------------- Íconos ---------------------
 
-icono_positivos <- 'fas fa-user-md'
-icono_activos <- 'fas fa-user-md'
-icono_recuperados <- 'fas fa-user-md'
-icono_fallecidos <- 'fas fa-user-md'
+icono_positivos <- 'fa fa-line-chart'
+icono_activos <- 'fas fa-exclamation-triangle'
+icono_recuperados <- 'fa fa-check-square-o'
+icono_fallecidos <- 'fa fa-close'
 
 icono_nuevos_positivos <- 'fas fa-user-md'
 
-icono_hospitalizados <- 'fas fa-user-md'
+icono_hospitalizados <- 'fas fa-hospital'
 icono_salon <- 'fas fa-user-md'
-icono_uci <- 'fas fa-user-md'
+icono_uci <- 'fas fa-procedures'
 
 #--------------- Otros parámetros -----------------
 
@@ -125,7 +125,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = "
                        round(100 * df_general_pais_ultima_fecha$activos / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos activos",
-         icon = icono_positivos, 
+         icon = icono_activos, 
          color = color_activos
 )
 ```
@@ -136,7 +136,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark
                        round(100 * df_general_pais_ultima_fecha$RECUPERADOS / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos recuperados",
-         icon = icono_positivos, 
+         icon = icono_recuperados, 
          color = color_recuperados
 )
 ```
@@ -147,7 +147,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark 
                        round(100 * df_general_pais_ultima_fecha$fallecidos / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos fallecidos",
-         icon = icono_positivos, 
+         icon = icono_fallecidos, 
          color = color_fallecidos
 )
 ```
