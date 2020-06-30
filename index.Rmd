@@ -33,9 +33,11 @@ color_hospitalizados <- '#ffcc00'
 color_salon <- '#ff6666'
 color_uci <- '#ff6600'
 
+color_positivos2 <- '#7fb2e5'
 #--------------------- Íconos ---------------------
 
 icono_positivos <- 'fa fa-line-chart'
+
 icono_activos <- 'fas fa-exclamation-triangle'
 icono_recuperados <- 'fa fa-check-square-o'
 icono_fallecidos <- 'fa fa-close'
@@ -46,19 +48,25 @@ icono_hospitalizados <- 'fas fa-hospital'
 icono_salon <- 'fas fa-user-md'
 icono_uci <- 'fas fa-procedures'
 
+icono_mujeres <- 'fa fa-venus'
+icono_hombres <- 'fa fa-mars'
+icono_adultostot <- 'fa fa-user'
+icono_adultosmayores <- 'fa fa-users'
+icono_menores <- 'fa fa-child'
+
 #--------------- Otros parámetros -----------------
 
 # Separador para lectura de datos CSV
-caracter_separador <- ';'
+caracter_separador <- ','
 
 #--------------- Archivos de datos ----------------
 
-archivo_general_pais <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_28_CSV_GENERAL.csv'
+archivo_general_pais <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_29_CSV_GENERAL.csv'
 
-archivo_positivos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_28_CSV_POSITIVOS.csv'
-#archivo_activos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_28_CSV_ACTIVOS.csv'
-archivo_recuperados_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_28_CSV_RECUP.csv'
-archivo_fallecidos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_28_CSV_FALLECIDOS.csv'
+archivo_positivos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_29_CSV_POSITIVOS.csv'
+archivo_activos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_29_CSV_ACTIVOS.csv'
+archivo_recuperados_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_29_CSV_RECUP.csv'
+archivo_fallecidos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/06_29_CSV_FALLECIDOS.csv'
 
 #---------------------- Datos ---------------------
 
@@ -274,12 +282,70 @@ Row
 
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_posi,
+                       ")", sep = " "), 
          caption = "Total de casos positivos", 
          icon = icono_positivos, 
          color = color_positivos
 )
 ```
+
+### Casos Positivos Mujeres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_posi, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$muj_posi / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Positivos Mujeres",
+         icon = icono_mujeres, 
+         color = color_positivos2
+)
+```
+
+### Casos Positivos Hombres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_posi, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$hom_posi / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Positivos Hombres",
+         icon = icono_hombres, 
+         color = color_positivos2
+)
+```
+
+### Casos Positivos Adultos {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_posi, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$adul_posi / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Positivos Adultos",
+         icon = icono_adultostot, 
+         color = color_positivos2
+)
+```
+
+### Casos Positivos Adultos Mayores {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$am_posi, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$am_posi / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Positivos Adultos Mayores",
+         icon = icono_adultosmayores, 
+         color = color_positivos2
+)
+```
+
+### Casos Positivos Niños {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_posi, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$menor_posi / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)",  sep = ""), 
+         caption = "Total de Casos Positivos Niños",
+         icon = icono_menores, 
+         color = color_positivos2
+)
+```
+
 
 Row {data-width=400}
 -----------------------------------------------------------------------
@@ -359,9 +425,11 @@ Row {data-height=1}
 -----------------------------------------------------------------------
 ### **Última actualización: `r  df_general_pais_ultima_fecha$FECHA`**
 
+Row
+-----------------------------------------------------------------------
 ### Casos recuperados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$recuperados, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), "", sep = " "), 
          caption = "Total de casos recuperados",
          icon = icono_recuperados, 
          color = color_recuperados
@@ -438,6 +506,8 @@ Row {data-height=1}
 -----------------------------------------------------------------------
 ### **Última actualización: `r  df_general_pais_ultima_fecha$FECHA`**
 
+Row
+-----------------------------------------------------------------------
 ### Casos fallecidos {.value-box}
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), "", sep = " "), 
