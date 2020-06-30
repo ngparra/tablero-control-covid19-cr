@@ -22,10 +22,10 @@ library(leaflet)
 
 #-------------------- Colores ---------------------
 
-color_positivos <- '#0066cc'
-color_activos <- 'red'
-color_recuperados <- 'green'
-color_fallecidos <- 'purple'
+color_positivos <- '#006699'    #Azul
+color_activos <- '#993333'      #Rojo
+color_recuperados <- '#336633'  #Verde 
+color_fallecidos <- '#660066'   #Morado
 
 color_nuevos_positivos <- 'pink'
 
@@ -34,6 +34,9 @@ color_salon <- '#ff6666'
 color_uci <- '#ff6600'
 
 color_positivos2 <- '#7fb2e5'
+color_activos2 <- '#cc6666'
+color_recuperados2 <- '#66cc99'
+color_fallecidos2 <- '#993399'
 #--------------------- Íconos ---------------------
 
 icono_positivos <- 'fa fa-line-chart'
@@ -118,6 +121,19 @@ df_recuperados_cantones_ultima_fecha <-
   filter(fecha == max(fecha, na.rm = TRUE)) %>%
   select(cod_canton, recuperados)
 
+# Data frame de casos activos por cantón
+df_activos_cantones_ancho <- read.csv(archivo_activos_cantones, sep = caracter_separador)
+df_activos_cantones <-
+  df_activos_cantones_ancho %>%
+  pivot_longer(cols = c(-cod_provin, -provincia, -cod_canton, -canton), names_to = "fecha", values_to = "activos")
+df_activos_cantones$fecha <- as.Date(df_activos_cantones$fecha, "X%d.%m.%Y")
+
+# Data frame de casos fallecidos por cantón en la última fecha
+df_activos_cantones_ultima_fecha <- 
+  df_activos_cantones %>%
+  filter(fecha == max(fecha, na.rm = TRUE)) %>%
+  select(cod_canton, activos)
+
 # Objeto sf de cantones
 url_base_wfs_ign_5mil <- "http://geos.snitcr.go.cr/be/IGN_5/wfs?"
 solicitud_wfs_ign_5mil_cantones <- "request=GetFeature&service=WFS&version=2.0.0&typeName=IGN_5:limitecantonal_5k&outputFormat=application/json"
@@ -140,6 +156,11 @@ sf_fallecidos_cantones_ultima_fecha <-
 sf_recuperados_cantones_ultima_fecha <-
   left_join(sf_cantones, df_recuperados_cantones_ultima_fecha, by = c('cod_canton')) %>%
   arrange(desc(recuperados))
+
+# Objeto sf de casos activos en cantones en la última fecha
+sf_activos_cantones_ultima_fecha <-
+  left_join(sf_cantones, df_activos_cantones_ultima_fecha, by = c('cod_canton')) %>%
+  arrange(desc(activos))
 ```
 
 Resumen
@@ -154,7 +175,9 @@ Row
 
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_posi,
+                       ")", "", sep = " "), 
          caption = "Total de casos positivos", 
          icon = icono_positivos, 
          color = color_positivos
@@ -164,6 +187,8 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark =
 ### Casos activos {.value-box}
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_acti,
+                       ")", " (",
                        round(100 * df_general_pais_ultima_fecha$activos / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos activos",
@@ -175,6 +200,8 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = "
 ### Casos recuperados {.value-box}
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$NUE_RECUP,
+                       ")", " (",
                        round(100 * df_general_pais_ultima_fecha$RECUPERADOS / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos recuperados",
@@ -186,6 +213,8 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark
 ### Casos fallecidos {.value-box}
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_falleci,
+                       ")", " (",
                        round(100 * df_general_pais_ultima_fecha$fallecidos / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos fallecidos",
@@ -199,7 +228,9 @@ Row
 
 ### Hospitalizados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_hospi,
+                       ")", "", sep = " "), 
          caption = "Total de hospitalizados", 
          icon = icono_hospitalizados,
          color = color_hospitalizados
@@ -209,6 +240,8 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = 
 ### En salón {.value-box}
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$salon, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_salon,
+                       ")", " (",
                        round(100 * df_general_pais_ultima_fecha$salon / df_general_pais_ultima_fecha$hospital, 1), 
                        "%)", sep = ""), 
          caption = "Hospitalizados en salón",
@@ -220,6 +253,8 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$salon, big.mark = ","
 ### En UCI {.value-box}
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$UCI, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_UCI,
+                       ")", " (",
                        round(100 * df_general_pais_ultima_fecha$UCI / df_general_pais_ultima_fecha$hospital, 1), 
                        "%)", sep = ""), 
          caption = "Hospitalizados en UCI",
@@ -418,8 +453,142 @@ Row {data-height=1}
 -----------------------------------------------------------------------
 ### **Última actualización: `r  df_general_pais_ultima_fecha$FECHA`**
 
+Row
+-----------------------------------------------------------------------
+### Casos Activos {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_acti,
+                       ")",  "", sep = " "), 
+         caption = "Total de Casos Activos",
+         icon = icono_activos, 
+         color = color_activos
+)
+```
 
-Casos recuperados
+
+### Casos activos Mujeres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_acti, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$muj_acti / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Activos Mujeres",
+         icon = icono_mujeres, 
+         color = color_activos2
+)
+```
+
+### Casos Activos Hombres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_acti, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$hom_acti / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Activos Hombres",
+         icon = icono_hombres, 
+         color = color_activos2
+)
+```
+
+### Casos Activos Adultos {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_acti, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$adul_acti / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Activos Adultos",
+         icon = icono_adultostot, 
+         color = color_activos2
+)
+```
+
+### Casos Activos Adultos Mayores {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$am_acti, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$am_acti / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Positivos Adultos Mayores",
+         icon = icono_adultosmayores, 
+         color = color_activos2
+)
+```
+
+### Casos Activos Niños {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_acti, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$menor_acti / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)",  sep = ""), 
+         caption = "Total de Casos Positivos Niños",
+         icon = icono_menores, 
+         color = color_activos2
+)
+```
+
+
+Row {data-width=400}
+-----------------------------------------------------------------------
+
+### Mapa de casos Activos en cantones
+```{r}
+
+paleta_roja <- colorBin(palette = "Reds", 
+                        domain = sf_activos_cantones_ultima_fecha$activos,
+                        bins = 10
+               )
+
+leaflet_cantones <- leaflet(sf_activos_cantones_ultima_fecha) %>% 
+  fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
+  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
+  addPolygons(fillColor = ~paleta_roja(activos), stroke=T, fillOpacity = 1,
+              color="black", weight=0.2, opacity= 0.5,
+              group = "Cantones",
+              popup = paste("Provincia: ", sf_activos_cantones_ultima_fecha$provincia, "<br>",
+                            "Cantón: ", sf_activos_cantones_ultima_fecha$canton, "<br>",
+                            "Activos: ", sf_activos_cantones_ultima_fecha$activos
+                            )
+  ) %>%
+  addLegend("bottomright", pal = paleta_roja, values = ~activos,
+    title = "Casos activos",
+    opacity = 1
+  ) %>%  
+  addLayersControl(
+    baseGroups = c("OpenStreetMap"),
+    overlayGroups = c("Cantones"),
+    options = layersControlOptions(collapsed = TRUE)    
+  ) %>%  
+  addMiniMap(
+    toggleDisplay = TRUE,
+    position = "bottomleft",
+    tiles = providers$OpenStreetMap.Mapnik
+  )
+
+# Despliegue del mapa
+leaflet_cantones
+```
+
+### Gráfico de cantones con mayor cantidad de casos Activos
+```{r}
+st_drop_geometry(sf_activos_cantones_ultima_fecha) %>%
+mutate(canton = factor(canton, levels = canton)) %>%
+top_n(n = 10, wt = activos) %>%  
+plot_ly(x = ~ canton, 
+        y = ~ activos, 
+        type = "bar", 
+        text = ~ activos,
+        textposition = 'auto',
+        marker = list(color = color_activos)
+) %>%
+layout(yaxis = list(title = "Cantidad de casos activos"),
+       xaxis = list(title = ""),
+       margin = list(l = 10,
+                     r = 10,
+                     b = 10,
+                     t = 10,
+                     pad = 2
+                )
+) 
+```
+
+
+Casos Recuperados
 =======================================================================
 Row {data-height=1}
 -----------------------------------------------------------------------
@@ -427,12 +596,70 @@ Row {data-height=1}
 
 Row
 -----------------------------------------------------------------------
-### Casos recuperados {.value-box}
+### Casos Recuperados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), "", sep = " "), 
-         caption = "Total de casos recuperados",
-         icon = icono_recuperados, 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$NUE_RECUP,
+                       ")",  "", sep = " "), 
+         caption = "Total de Casos Recuperados",
+         icon = icono_activos, 
          color = color_recuperados
+)
+```
+
+
+### Casos Recuperados Mujeres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$MUJ_RECUP, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$MUJ_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Recuperados Mujeres",
+         icon = icono_mujeres, 
+         color = color_recuperados2
+)
+```
+
+### Casos Recuperados Hombres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$HOM_RECUP, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$HOM_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Recuperados Hombres",
+         icon = icono_hombres, 
+         color = color_recuperados2
+)
+```
+
+### Casos Recuperados Adultos {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$ADUL_RECUP, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$ADUL_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Recuperados Adultos",
+         icon = icono_adultostot, 
+         color = color_recuperados2
+)
+```
+
+### Casos Recuperados Adultos Mayores {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$AM_RECUP, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$AM_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Recuperados Adultos Mayores",
+         icon = icono_adultosmayores, 
+         color = color_recuperados2
+)
+```
+
+### Casos Recuperados Niños {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$MENOR_RECUP, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$MENOR_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)",  sep = ""), 
+         caption = "Total de Casos Recuperados Niños",
+         icon = icono_menores, 
+         color = color_recuperados2
 )
 ```
 
@@ -458,7 +685,7 @@ leaflet_cantones <- leaflet(sf_recuperados_cantones_ultima_fecha) %>%
                             "Recuperados: ", sf_recuperados_cantones_ultima_fecha$recuperados
                             )
   ) %>%
-  addLegend("topleft", pal = paleta_verdes, values = ~recuperados,
+  addLegend("bottomright", pal = paleta_verdes, values = ~recuperados,
     title = "Casos Recuperados",
     opacity = 1
   ) %>%  
@@ -508,12 +735,70 @@ Row {data-height=1}
 
 Row
 -----------------------------------------------------------------------
-### Casos fallecidos {.value-box}
+### Casos Fallecidos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), " (",
+                       df_general_pais_ultima_fecha$nue_falleci,
+                       ")",  "", sep = " "), 
          caption = "Total de Casos Fallecidos",
-         icon = icono_fallecidos, 
+         icon = icono_activos, 
          color = color_fallecidos
+)
+```
+
+
+### Casos Fallecidos Mujeres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_fall, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$muj_fall / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Fallecidos Mujeres",
+         icon = icono_mujeres, 
+         color = color_fallecidos2
+)
+```
+
+### Casos Fallecidos Hombres {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_fall, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$hom_fall / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Fallecidos Hombres",
+         icon = icono_hombres, 
+         color = color_fallecidos2
+)
+```
+
+### Casos Fallecidos Adultos {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_fall, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$adul_fall / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Fallecidos Adultos",
+         icon = icono_adultostot, 
+         color = color_fallecidos2
+)
+```
+
+### Casos Fallecidos Adultos Mayores {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$am_fall, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$am_fall / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)", sep = ""), 
+         caption = "Total de Casos Fallecidos Adultos Mayores",
+         icon = icono_adultosmayores, 
+         color = color_fallecidos2
+)
+```
+
+### Casos Fallecidos Niños {.value-box}
+```{r}
+valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_fall, big.mark = ","), " (",
+                       round(100 * df_general_pais_ultima_fecha$menor_fall / df_general_pais_ultima_fecha$positivos, 1), 
+                       "%)",  sep = ""), 
+         caption = "Total de Casos Fallecidos Niños",
+         icon = icono_menores, 
+         color = color_fallecidos2
 )
 ```
 
@@ -539,7 +824,7 @@ leaflet_cantones <- leaflet(sf_fallecidos_cantones_ultima_fecha) %>%
                             "Fallecidos: ", sf_fallecidos_cantones_ultima_fecha$fallecidos
                             )
   ) %>%
-  addLegend("topleft", pal = paleta_morada, values = ~fallecidos,
+  addLegend("bottomright", pal = paleta_morada, values = ~fallecidos,
     title = "Casos Fallecidos",
     opacity = 1
   ) %>%  
