@@ -175,7 +175,7 @@ Row
 
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_posi,
                        ")", "", sep = " "), 
          caption = "Total de casos positivos", 
@@ -186,7 +186,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark =
 
 ### Casos activos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_acti,
                        ")", " (",
                        round(100 * df_general_pais_ultima_fecha$activos / df_general_pais_ultima_fecha$positivos, 1), 
@@ -199,7 +199,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = "
 
 ### Casos recuperados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$NUE_RECUP,
                        ")", " (",
                        round(100 * df_general_pais_ultima_fecha$RECUPERADOS / df_general_pais_ultima_fecha$positivos, 1), 
@@ -212,7 +212,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark
 
 ### Casos fallecidos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_falleci,
                        ")", " (",
                        round(100 * df_general_pais_ultima_fecha$fallecidos / df_general_pais_ultima_fecha$positivos, 1), 
@@ -228,7 +228,7 @@ Row
 
 ### Hospitalizados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_hospi,
                        ")", "", sep = " "), 
          caption = "Total de hospitalizados", 
@@ -239,7 +239,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = 
 
 ### En salón {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$salon, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$salon, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_salon,
                        ")", " (",
                        round(100 * df_general_pais_ultima_fecha$salon / df_general_pais_ultima_fecha$hospital, 1), 
@@ -252,7 +252,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$salon, big.mark = ","
 
 ### En UCI {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$UCI, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$UCI, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_UCI,
                        ")", " (",
                        round(100 * df_general_pais_ultima_fecha$UCI / df_general_pais_ultima_fecha$hospital, 1), 
@@ -318,7 +318,7 @@ Row
 
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_posi,
                        ")", sep = " "), 
          caption = "Total de casos positivos", 
@@ -329,7 +329,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark =
 
 ### Casos Positivos Mujeres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_posi, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_posi, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$muj_posi / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Positivos Mujeres",
@@ -340,7 +340,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_posi, big.mark = 
 
 ### Casos Positivos Hombres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_posi, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_posi, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$hom_posi / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Positivos Hombres",
@@ -351,7 +351,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_posi, big.mark = 
 
 ### Casos Positivos Adultos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_posi, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_posi, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$adul_posi / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Positivos Adultos",
@@ -362,7 +362,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_posi, big.mark =
 
 ### Casos Positivos Adultos Mayores {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$am_posi, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$am_posi, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$am_posi / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Positivos Adultos Mayores",
@@ -373,7 +373,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$am_posi, big.mark = "
 
 ### Casos Positivos Niños {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_posi, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_posi, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$menor_posi / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)",  sep = ""), 
          caption = "Total de Casos Positivos Niños",
@@ -458,7 +458,7 @@ Row
 -----------------------------------------------------------------------
 ### Casos Activos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_acti,
                        ")",  "", sep = " "), 
          caption = "Total de Casos Activos",
@@ -470,7 +470,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = "
 
 ### Casos activos Mujeres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_acti, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_acti, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$muj_acti / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Activos Mujeres",
@@ -481,7 +481,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_acti, big.mark = 
 
 ### Casos Activos Hombres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_acti, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_acti, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$hom_acti / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Activos Hombres",
@@ -492,7 +492,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_acti, big.mark = 
 
 ### Casos Activos Adultos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_acti, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_acti, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$adul_acti / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Activos Adultos",
@@ -503,7 +503,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_acti, big.mark =
 
 ### Casos Activos Adultos Mayores {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$am_acti, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$am_acti, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$am_acti / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Positivos Adultos Mayores",
@@ -514,7 +514,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$am_acti, big.mark = "
 
 ### Casos Activos Niños {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_acti, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_acti, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$menor_acti / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)",  sep = ""), 
          caption = "Total de Casos Positivos Niños",
@@ -599,7 +599,7 @@ Row
 -----------------------------------------------------------------------
 ### Casos Recuperados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$NUE_RECUP,
                        ")",  "", sep = " "), 
          caption = "Total de Casos Recuperados",
@@ -611,7 +611,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark
 
 ### Casos Recuperados Mujeres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$MUJ_RECUP, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$MUJ_RECUP, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$MUJ_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Recuperados Mujeres",
@@ -622,7 +622,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$MUJ_RECUP, big.mark =
 
 ### Casos Recuperados Hombres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$HOM_RECUP, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$HOM_RECUP, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$HOM_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Recuperados Hombres",
@@ -633,7 +633,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$HOM_RECUP, big.mark =
 
 ### Casos Recuperados Adultos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$ADUL_RECUP, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$ADUL_RECUP, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$ADUL_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Recuperados Adultos",
@@ -644,7 +644,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$ADUL_RECUP, big.mark 
 
 ### Casos Recuperados Adultos Mayores {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$AM_RECUP, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$AM_RECUP, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$AM_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Recuperados Adultos Mayores",
@@ -655,7 +655,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$AM_RECUP, big.mark = 
 
 ### Casos Recuperados Niños {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$MENOR_RECUP, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$MENOR_RECUP, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$MENOR_RECUP / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)",  sep = ""), 
          caption = "Total de Casos Recuperados Niños",
@@ -738,7 +738,7 @@ Row
 -----------------------------------------------------------------------
 ### Casos Fallecidos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_falleci,
                        ")",  "", sep = " "), 
          caption = "Total de Casos Fallecidos",
@@ -750,7 +750,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark 
 
 ### Casos Fallecidos Mujeres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_fall, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_fall, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$muj_fall / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Fallecidos Mujeres",
@@ -761,7 +761,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$muj_fall, big.mark = 
 
 ### Casos Fallecidos Hombres {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_fall, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_fall, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$hom_fall / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Fallecidos Hombres",
@@ -772,7 +772,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$hom_fall, big.mark = 
 
 ### Casos Fallecidos Adultos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_fall, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_fall, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$adul_fall / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Fallecidos Adultos",
@@ -783,7 +783,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_fall, big.mark =
 
 ### Casos Fallecidos Adultos Mayores {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$am_fall, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$am_fall, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$am_fall / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Casos Fallecidos Adultos Mayores",
@@ -794,7 +794,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$am_fall, big.mark = "
 
 ### Casos Fallecidos Niños {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_fall, big.mark = ","), " (",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_fall, big.mark = ","), "(+",
                        round(100 * df_general_pais_ultima_fecha$menor_fall / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)",  sep = ""), 
          caption = "Total de Casos Fallecidos Niños",
