@@ -275,6 +275,7 @@ plot_ly(data = df_general_pais,
                 type = 'scatter',
                 mode = 'lines',
                 line = list(color = color_positivos)) %>%
+  config(locale = "es") %>%
   add_trace(y = ~ activos,
                     name = 'Activos',
                     mode = 'lines',
