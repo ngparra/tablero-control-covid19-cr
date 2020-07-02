@@ -82,6 +82,10 @@ df_general_pais_ultima_fecha <-
   df_general_pais %>%
   filter(FECHA == max(FECHA, na.rm = TRUE))
 
+# Data frame de datos generales por país en la última fecha
+df_general_pais_viejos <- 
+  df_general_pais[116,]
+
 # Data frame de casos positivos por cantón
 df_positivos_cantones_ancho <- read.csv(archivo_positivos_cantones, sep = caracter_separador)
 df_positivos_cantones <-
@@ -174,9 +178,11 @@ Row
 
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "(+",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "(",
                        df_general_pais_ultima_fecha$nue_posi,
-                       ")", "", sep = " "), 
+                       ")", "(", (df_general_pais_viejos$nue_posi
+                       -df_general_pais_ultima_fecha$nue_posi), ")",
+                       "", sep = " "), 
          caption = "Total de casos positivos", 
          icon = icono_positivos, 
          color = color_positivos
@@ -213,7 +219,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_falleci,
-                       ")", " (",
+                       ")", "(",
                        round(100 * df_general_pais_ultima_fecha$fallecidos / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos fallecidos",
