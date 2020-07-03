@@ -5,7 +5,10 @@ output:
     orientation: rows
     social: menu
     source_code: embed
-    vertical_layout: fill    
+    vertical_layout: fill 
+    theme: cosmo
+    resize_reload: TRUE
+    fig_mobile: TRUE
 ---
 
 ```{r setup, include=FALSE}
@@ -169,7 +172,7 @@ sf_activos_cantones_ultima_fecha <-
 
 Resumen
 =======================================================================
-Row {data-height=1}
+Row {data-height=10}
 -----------------------------------------------------------------------
 ### **Última actualización: `r  df_general_pais_ultima_fecha$FECHA`**
 
@@ -180,8 +183,7 @@ Row
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "(",
                        df_general_pais_ultima_fecha$nue_posi,
-                       ")", "(", (df_general_pais_viejos$nue_posi
-                       -df_general_pais_ultima_fecha$nue_posi), ")",
+                       ")",
                        "", sep = " "), 
          caption = "Total de casos positivos", 
          icon = icono_positivos, 
@@ -268,7 +270,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$UCI, big.mark = ","),
 )
 ```
 
-Row {data-width=400}
+Row {data-width=500}
 -----------------------------------------------------------------------
 
 ### Gráfico de variación de las cantidades de casos en el tiempo
@@ -313,7 +315,7 @@ st_drop_geometry(sf_positivos_cantones_ultima_fecha) %>%
 
 Casos positivos
 =======================================================================
-Row {data-height=1}
+Row {data-height=10}
 -----------------------------------------------------------------------
 ### **Última actualización: `r  df_general_pais_ultima_fecha$FECHA`**
 
