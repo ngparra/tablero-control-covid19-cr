@@ -7,7 +7,7 @@ output:
     source_code: embed
     vertical_layout: fill 
     theme: cosmo
-    resize_reload: TRUE
+    resize_reload: FALSE
     fig_mobile: FALSE
 ---
 
