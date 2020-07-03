@@ -8,7 +8,7 @@ output:
     vertical_layout: fill 
     theme: cosmo
     resize_reload: TRUE
-    fig_mobile: TRUE
+    fig_mobile: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -142,12 +142,14 @@ df_activos_cantones_ultima_fecha <-
   select(cod_canton, activos)
 
 # Objeto sf de cantones
-url_base_wfs_ign_5mil <- "http://geos.snitcr.go.cr/be/IGN_5/wfs?"
-solicitud_wfs_ign_5mil_cantones <- "request=GetFeature&service=WFS&version=2.0.0&typeName=IGN_5:limitecantonal_5k&outputFormat=application/json"
-sf_cantones <-
-  st_read(paste0(url_base_wfs_ign_5mil, solicitud_wfs_ign_5mil_cantones)) %>%
-  st_simplify(dTolerance = 1000) %>%
-  st_transform(4326)
+#url_base_wfs_ign_5mil <- "http://geos.snitcr.go.cr/be/IGN_5/wfs?"
+#solicitud_wfs_ign_5mil_cantones <- "request=GetFeature&service=WFS&version=2.0.0&typeName=IGN_5:limitecantonal_5k&outputFormat=application/json"
+#sf_cantones <-
+ # st_read(paste0(url_base_wfs_ign_5mil, solicitud_wfs_ign_5mil_cantones)) %>%
+ # st_simplify(dTolerance = 1000) %>%
+  #st_transform(4326)
+
+sf_cantones <- st_read('https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/delimitacion-territorial-administrativa/cr/ign/cr_limite_cantonal_ign_wgs84.geojson')
 
 # Objeto sf de casos positivos en cantones en la última fecha
 sf_positivos_cantones_ultima_fecha <-
