@@ -936,7 +936,12 @@ leaflet() %>%
   addHeatmap(data = sf_centroidesdistritos_ultima_fecha, 
              intensity= sf_centroidesdistritos_ultima_fecha$activos,
              radius = 15, blur =25, max = 70)%>%
-  addLayersControl(baseGroups = c("CartoDB.Dark", "OpenStreetMap")) 
+  addLayersControl(baseGroups = c("CartoDB.Dark", "OpenStreetMap"))%>%  
+  addMiniMap(
+    toggleDisplay = TRUE,
+    position = "bottomleft",
+    tiles = providers$penStreetMap.Mapnik
+  ) 
 
 ```
 
