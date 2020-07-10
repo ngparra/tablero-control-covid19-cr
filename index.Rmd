@@ -6,7 +6,6 @@ output:
     social: menu
     source_code: embed
     vertical_layout: fill 
-    theme: cosmo
     resize_reload: TRUE
     fig_mobile: TRUE
 ---
@@ -22,7 +21,8 @@ library(dplyr)
 library(tidyr)
 library(sf)
 library(leaflet)
-
+library(ggplot2)
+library(leaflet.extras)
 #-------------------- Colores ---------------------
 
 color_positivos <- '#006699'    #Azul
@@ -164,6 +164,53 @@ sf_recuperados_cantones_ultima_fecha <-
 sf_activos_cantones_ultima_fecha <-
   left_join(sf_cantones, df_activos_cantones_ultima_fecha, by = c('cod_canton')) %>%
   arrange(desc(activos))
+
+# CÓDIGO PARA LA SECCIÓN OPCIONAL DE LA TAREA PROGRAMADA
+# Archivo CSV que proviene de la hoja con datos de distritos del archivo Excel con datos generales
+archivo_general_distritos <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_02_CSV_GENERAL_DISTRITOS.csv'
+# Carga del archivo CSV en un data frame
+df_general_distritos_sucio <- read.csv(archivo_general_distritos)
+# Eliminación de filas y columnas que corresponden a encabezados, totales, etc.
+df_general_distritos_ultima_fecha <- df_general_distritos_sucio[-c(1:5), -c(1, 3, 10, 11)]
+# Cambio de nombre de las columnas
+df_general_distritos_ultima_fecha <- 
+  df_general_distritos_ultima_fecha %>%
+  rename(provincia = X.1,
+         canton = X.3,
+         distrito = X.4,
+         positivos = X.5,
+         recuperados = X.6,
+         fallecidos = X.7,
+         activos = X.8
+  ) %>%  
+  mutate_all(funs(sub("^\\s*$", NA, .))) %>% # Se llenan con NA las celdas con espacios vacíos
+  mutate(distrito = if_else(distrito == "El Carmen", "Carmen", distrito)) %>%
+  mutate(distrito = if_else(distrito == "Valle de La Estrella", "Valle La Estrella", distrito)) %>%
+  mutate(distrito = if_else(distrito == "La Amistad", "La  Amistad", distrito)) %>%
+  fill(c(1,2)) # Se rellenan "hacia abajo" las columnas de provincia y cantón con valor NA
+# Borrado de las filas con valor de NA o de "Sin información de distrito" en la columna de distrito
+df_general_distritos_ultima_fecha <- df_general_distritos_ultima_fecha[!is.na(df_general_distritos_ultima_fecha$distrito), ]
+df_general_distritos_ultima_fecha <- df_general_distritos_ultima_fecha[df_general_distritos_ultima_fecha$distrito != 'Sin información de distrito', ]
+
+#Creacion de los Data frame para la Tabla de Total de Casos
+
+df_positivosactivos_cantones_ultima_actualizacion <- left_join(df_activos_cantones_ultima_fecha, df_positivos_cantones_ultima_fecha, by = c( "cod_canton"))
+df_recuperadosfallecidos_cantones_ultima_actualizacion  <- left_join(df_recuperados_cantones_ultima_fecha, df_fallecidos_cantones_ultima_fecha, by = c( "cod_canton"))
+df_total_cantones_ultima_actualizacion  <- left_join(df_positivosactivos_cantones_ultima_actualizacion, df_recuperadosfallecidos_cantones_ultima_actualizacion)
+
+sf_total_cantones_ultima_actualizacion <- 
+  left_join(sf_cantones, df_total_cantones_ultima_actualizacion, by = c('cod_canton'))
+
+# Objeto sf de Distritos
+
+sf_distritos <- st_read('https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/delimitacion-territorial-administrativa/cr/ign/cr_limite_distrital_ign_wgs84.geojson')
+
+centroidesdistritos <- st_centroid(sf_distritos)
+sf_centroidesdistritos_ultima_fecha <-
+  left_join( centroidesdistritos, df_general_distritos_ultima_fecha, centroidesdistritos, by = c('distrito'))  %>%
+  arrange(desc(activos))
+
+
 ```
 
 Resumen
@@ -177,7 +224,7 @@ Row
 
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "(",
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "(+",
                        df_general_pais_ultima_fecha$nue_posi,
                        ")",
                        "", sep = " "), 
@@ -300,8 +347,9 @@ plot_ly(data = df_general_pais,
 
 ### Tabla de cantidades de casos en cantones
 ```{r}
-st_drop_geometry(sf_positivos_cantones_ultima_fecha) %>% 
-  select(Provincia = provincia, Canton = canton, Positivos = positivos) %>%
+st_drop_geometry(sf_total_cantones_ultima_actualizacion) %>% 
+  select(Provincia = provincia, Canton = canton, Positivos = positivos, Activos = activos, Recuperados = recuperados, Fallecidos = fallecidos)    %>% 
+  arrange(desc(Activos)) %>%
   DT::datatable(rownames = FALSE,
                 options = list(searchHighlight = TRUE, 
                                language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
@@ -438,7 +486,8 @@ plot_ly(x = ~ canton,
         text = ~ positivos,
         textposition = 'auto',
         marker = list(color = color_positivos)
-) %>%
+)  %>%
+  config(locale = "es") %>%
 layout(yaxis = list(title = "Cantidad de casos positivos"),
        xaxis = list(title = ""),
        margin = list(l = 10,
@@ -446,7 +495,7 @@ layout(yaxis = list(title = "Cantidad de casos positivos"),
                      b = 10,
                      t = 10,
                      pad = 2
-                )
+                ) 
 ) 
 ```
 
@@ -579,7 +628,8 @@ plot_ly(x = ~ canton,
         text = ~ activos,
         textposition = 'auto',
         marker = list(color = color_activos)
-) %>%
+)  %>%
+  config(locale = "es") %>%
 layout(yaxis = list(title = "Cantidad de casos activos"),
        xaxis = list(title = ""),
        margin = list(l = 10,
@@ -587,7 +637,7 @@ layout(yaxis = list(title = "Cantidad de casos activos"),
                      b = 10,
                      t = 10,
                      pad = 2
-                )
+                ) 
 ) 
 ```
 
@@ -719,7 +769,8 @@ plot_ly(x = ~ canton,
         text = ~ recuperados,
         textposition = 'auto',
         marker = list(color = color_recuperados)
-) %>%
+)%>%
+  config(locale = "es") %>%
 layout(yaxis = list(title = "Cantidad de Casos Recuperados"),
        xaxis = list(title = "Cantones"),
        margin = list(l = 10,
@@ -727,7 +778,7 @@ layout(yaxis = list(title = "Cantidad de Casos Recuperados"),
                      b = 10,
                      t = 10,
                      pad = 2
-                )
+                ) 
 ) 
 ```
 
@@ -858,7 +909,8 @@ plot_ly(x = ~ canton,
         text = ~ fallecidos,
         textposition = 'auto',
         marker = list(color = color_fallecidos)
-) %>%
+)%>%
+  config(locale = "es")  %>%
 layout(yaxis = list(title = "Cantidad de Casos Fallecidos"),
        xaxis = list(title = "Cantones"),
        margin = list(l = 10,
@@ -866,6 +918,27 @@ layout(yaxis = list(title = "Cantidad de Casos Fallecidos"),
                      b = 10,
                      t = 10,
                      pad = 2
-                )
+                ) 
 ) 
 ```
+
+Mapa de Calor
+=======================================================================
+Row 
+-----------------------------------------------------------------------
+### **Última actualización: `r  df_general_pais_ultima_fecha$FECHA`**
+
+```{r}
+leaflet() %>%
+  fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
+  addProviderTiles(providers$CartoDB.DarkMatter, group = "CartoDB.Dark") %>%
+  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
+  addHeatmap(data = sf_centroidesdistritos_ultima_fecha, 
+             intensity= sf_centroidesdistritos_ultima_fecha$activos,
+             radius = 15, blur =25, max = 70)%>%
+  addLayersControl(baseGroups = c("CartoDB.Dark", "OpenStreetMap")) 
+
+```
+
+
+
